@@ -31,6 +31,9 @@ app = FastAPI()
 # Create a router with the /api prefix
 api_router = APIRouter(prefix="/api")
 
+# In-memory storage for game sessions (use database in production)
+game_sessions: Dict[str, Dict[str, Any]] = {}
+leaderboard: Dict[str, int] = {}
 
 # Define Models
 class StatusCheck(BaseModel):
@@ -40,6 +43,10 @@ class StatusCheck(BaseModel):
 
 class StatusCheckCreate(BaseModel):
     client_name: str
+
+class FrameActionRequest(BaseModel):
+    untrustedData: dict
+    trustedData: dict = {}
 
 # Add your routes to the router instead of directly to app
 @api_router.get("/")
